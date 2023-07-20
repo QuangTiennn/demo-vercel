@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "builds": [{ "src": "/app.js", "use": "@vercel/node" }],
-  "public": true,
+  "builds": [{ "src": "app.js", "use": "@vercel/node" }],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/app.js"
-    }
-  ]
+    { "src": "/users", "dest": "/users" },
+    { "src": "/(.*)", "dest": "/" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
