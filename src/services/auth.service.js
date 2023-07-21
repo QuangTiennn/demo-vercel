@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { STATUS_CODE } from "../constants/index";
+import { STATUS_CODE } from "../constants/index.js";
 import { MESSAGES } from "../constants/messages.constant.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import userModel from "../models/user.model.js";
