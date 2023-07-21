@@ -13,6 +13,8 @@ export const registerController = async (req, res) => {
     }
     handleSuccessResponse(res, result);
   } catch (error) {
+    console.log(error, "[<<<------- error ------->>>]");
+
     handleErrorResponse(res);
   }
 };

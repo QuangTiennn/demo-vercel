@@ -22,6 +22,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
+app.use(express.json());
 const options = {
   definition: {
     openapi: "3.1.0",
@@ -47,7 +48,7 @@ const options = {
     ],
     servers: [
       {
-        url: "https://todo-api-sgh1.vercel.app/api/v1",
+        url: "http://localhost:3000/api/v1",
       },
     ],
   },
