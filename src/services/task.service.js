@@ -1,4 +1,4 @@
-import { STATUS_CODE } from "../constants.js";
+import { STATUS_CODE } from "../constants/index.js";
 import { MESSAGES } from "../constants/messages.constant.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import taskModel from "../models/task.model.js";
