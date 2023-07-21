@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   loginController,
   registerController,
-} from "../controller/auth.controller.js";
+} from "../controller/auth.controller";
 
 // Initialization
 const authRoute = Router();
