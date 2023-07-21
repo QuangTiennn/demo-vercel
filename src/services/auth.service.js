@@ -2,9 +2,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { STATUS_CODE } from "../constants/index";
-import { MESSAGES } from "../constants/messages.constant";
-import { errorResponse, successResponse } from "../helpers/response.helper";
-import userModel from "../models/user.model";
+import { MESSAGES } from "../constants/messages.constant.js";
+import { errorResponse, successResponse } from "../helpers/response.helper.js";
+import userModel from "../models/user.model.js";
 export const register = async (payload) => {
   try {
     const userExisted = await userModel.findOne({ email: payload.email });

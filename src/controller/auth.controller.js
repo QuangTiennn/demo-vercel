@@ -1,8 +1,8 @@
 import {
   handleErrorResponse,
   handleSuccessResponse,
-} from "../helpers/response.helper";
-import { login, register } from "../services/auth.service";
+} from "../helpers/response.helper.js";
+import { login, register } from "../services/auth.service.js";
 
 export const registerController = async (req, res) => {
   try {

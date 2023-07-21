@@ -1,8 +1,12 @@
 import {
   handleErrorResponse,
   handleSuccessResponse,
-} from "../helpers/response.helper";
-import { deleteUser, getMe, updateUserProfile } from "../services/user.service";
+} from "../helpers/response.helper.js";
+import {
+  deleteUser,
+  getMe,
+  updateUserProfile,
+} from "../services/user.service.js";
 
 export const updateUserProfileController = async (req, Requests) => {
   try {

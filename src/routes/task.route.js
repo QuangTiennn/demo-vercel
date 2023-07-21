@@ -6,8 +6,8 @@ import {
   getDetailTaskController,
   getListTaskController,
   updateTaskController,
-} from "../controller/task.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
+} from "../controller/task.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 // Initialization
 const taskRoute = Router();

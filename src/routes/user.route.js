@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   deleteUserController,
   updateUserProfileController,
-} from "../controller/user.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
+} from "../controller/user.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 // Initialization
 const userRoute = Router();

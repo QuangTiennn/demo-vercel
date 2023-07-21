@@ -1,14 +1,14 @@
 import {
   handleErrorResponse,
   handleSuccessResponse,
-} from "../helpers/response.helper";
+} from "../helpers/response.helper.js";
 import {
   createTask,
   deleteTask,
   getDetail,
   getList,
   updateTask,
-} from "../services/task.service";
+} from "../services/task.service.js";
 
 export const createTaskController = async (req, res) => {
   try {
