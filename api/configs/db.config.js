@@ -20,6 +20,12 @@ export const connectDatabase = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 10000,
+        server: {
+          socketOptions: {
+            socketTimeoutMS: 0,
+            connectTimeoutMS: 0,
+          },
+        },
       }
     );
 
