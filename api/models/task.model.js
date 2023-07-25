@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -14,12 +13,10 @@ const taskSchema = new mongoose.Schema(
       trim: true,
     },
     start_time: {
-      type: String,
-      default: null,
+      type: Date, // Change data type to Date
     },
     end_time: {
-      type: Number,
-      default: null,
+      type: Date, // Change data type to Date
     },
     status: {
       type: String,
@@ -36,5 +33,4 @@ const taskSchema = new mongoose.Schema(
 taskSchema.plugin(mongoosePaginate);
 
 const taskModel = mongoose.model("tasks", taskSchema);
-taskModel.paginate();
 export default taskModel;
