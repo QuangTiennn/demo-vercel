@@ -19,7 +19,7 @@ export const connectDatabase = async () => {
         dbName: "todoapp",
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        serverSelectionTimeoutMS: 10000,
+        serverSelectionTimeoutMS: 1000000000,
       }
     );
 
