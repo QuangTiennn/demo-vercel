@@ -30,25 +30,25 @@ export const register = async (payload) => {
 
 export const login = async (payload) => {
   try {
-    // const user = await userModel.findOne({ email: payload.email });
+    const user = await userModel.findOne({ email: payload.email });
 
-    // if (!user) {
-    //   return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
-    // }
+    if (!user) {
+      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+    }
 
-    // const comparePassword = await bcrypt.compare(
-    //   payload.password,
-    //   user.password
-    // );
+    const comparePassword = await bcrypt.compare(
+      payload.password,
+      user.password
+    );
 
-    // if (!comparePassword) {
-    //   return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.WRONG_PASSWORD);
-    // }
+    if (!comparePassword) {
+      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.WRONG_PASSWORD);
+    }
 
-    // const jwtSecret = process.env.JWT_SECRET || "laskjdefaksdherusdlak";
-    // const token = jwt.sign({ _id: user._id }, jwtSecret, {
-    //   expiresIn: "30d",
-    // });
+    const jwtSecret = process.env.JWT_SECRET || "laskjdefaksdherusdlak";
+    const token = jwt.sign({ _id: user._id }, jwtSecret, {
+      expiresIn: "30d",
+    });
 
     return successResponse();
   } catch (error) {
