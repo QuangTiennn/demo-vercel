@@ -3,7 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { connectDatabase } from "./src/configs/db.config.js";
+import { connectDatabase } from "./api/configs/db.config.js";
 import routes from "./src/routes/index.route.js";
 const app = express();
 const port = 3000;
