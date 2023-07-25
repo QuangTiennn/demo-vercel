@@ -4,7 +4,7 @@ import morgan from "morgan";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { connectDatabase } from "./api/configs/db.config.js";
-import routes from "./src/routes/index.route.js";
+import routes from "./api/routes/index.route.js";
 const app = express();
 const port = 3000;
 
@@ -52,7 +52,7 @@ const options = {
       },
     ],
   },
-  apis: ["./src/routes/*.js"],
+  apis: ["./api/routes/*.js"],
 };
 
 const swaggerCSS =
