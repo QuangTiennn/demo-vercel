@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const taskSchema = new mongoose.Schema(
@@ -35,6 +35,6 @@ const taskSchema = new mongoose.Schema(
 );
 taskSchema.plugin(mongoosePaginate);
 
-const taskModel = model("tasks", taskSchema);
+const taskModel = mongoose.model("tasks", taskSchema);
 taskModel.paginate();
 export default taskModel;
