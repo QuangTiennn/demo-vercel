@@ -14,7 +14,7 @@ export const connectDatabase = async () => {
 
     await mongoose.connect(
       // `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`,
-      "mongodb+srv://nguyenquangtien9787:quangtien2212@cluster0.0t0hwpj.mongodb.net/?retryWrites=true&w=majority",
+      "mongodb+srv://nguyenquangtien9787:quangtien2212@cluster0.pabdxzp.mongodb.net/?retryWrites=true&w=majority",
       {
         dbName: "todoapp",
       }
