@@ -17,6 +17,9 @@ export const connectDatabase = async () => {
       "mongodb+srv://nguyenquangtien9787:quangtien2212@cluster0.pabdxzp.mongodb.net/?retryWrites=true&w=majority",
       {
         dbName: "todoapp",
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 10000,
       }
     );
 
@@ -24,5 +27,6 @@ export const connectDatabase = async () => {
   } catch (error) {
     console.log("error during connecting to mongo: ");
     console.error(error);
+    setTimeout(connectDatabase, 5000);
   }
 };
