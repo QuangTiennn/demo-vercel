@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
-import { MESSAGES, STATUS_CODE } from "../constants/index.js";
+import { MESSAGES, STATUS_CODE } from "../constants/index";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import userModel from "../models/user.model.js";
+export const getMe = async (id) => {
   try {
     const user = await userModel.findById(id);
 
