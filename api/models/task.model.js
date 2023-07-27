@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import { TASK_STATUS } from "../constants";
+import { TASK_STATUS } from "../constants/index";
 
 const taskSchema = new mongoose.Schema(
   {
