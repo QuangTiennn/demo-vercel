@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
+import { TASK_STATUS } from "../constants";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -14,17 +15,24 @@ const taskSchema = new mongoose.Schema(
       trim: true,
     },
     start_time: {
-      type: Date, // Change data type to Date
+      type: Date,
+      default: null,
     },
     end_time: {
-      type: Date, // Change data type to Date
+      type: Date,
+      default: null,
     },
     status: {
       type: String,
+      default: TASK_STATUS.PROCESSING,
     },
     created_by: {
       type: mongoose.Types.ObjectId,
       ref: "users",
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {

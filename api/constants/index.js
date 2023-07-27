@@ -9,3 +9,9 @@ export const STATUS_CODE = {
   INTERNAL_SERVER_ERROR: 500,
   BAD_GATEWAY: 502,
 };
+
+export const TASK_STATUS = {
+  PROCESSING: "PROCESSING",
+  DONE: "DONE",
+  FAIL: "FAIL",
+};

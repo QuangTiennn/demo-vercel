@@ -8,6 +8,11 @@ import {
   updateTaskController,
 } from "../controller/task.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validate.middleware.js";
+import {
+  createTaskValidate,
+  updateTaskValidate,
+} from "../validations/task.validation.js";
 
 // Initialization
 const taskRoute = Router();
@@ -31,15 +36,22 @@ const taskRoute = Router();
  *                 type: string
  *               description:
  *                 type: string
+ *               status :
+ *                 type : string
  *
  *     responses:
  *       200:
  *         description: Successful operation
  */
-taskRoute.post("/create", authMiddleware, createTaskController);
+taskRoute.post(
+  "/create",
+  authMiddleware,
+  validate(createTaskValidate),
+  createTaskController
+);
 /**
  * @swagger
- * /task/get-detail/:id:
+ * /task/get-detail/{id}:
  *   get:
  *     summary: get task detail
  *     description: get task detail
@@ -78,7 +90,12 @@ taskRoute.get("/get-detail/:id", authMiddleware, getDetailTaskController);
  *         name: status
  *         schema:
  *           type: string
- *         description: status of task
+ *         description: status of task ["PROCESSING", "DONE", "FAIL"]
+ *       - in: query
+ *         name: deleted
+ *         schema:
+ *           type: boolean
+ *         description: get tasks deleted
  *     responses:
  *       200:
  *         description: Successful operation
@@ -87,7 +104,7 @@ taskRoute.get("/get-list", authMiddleware, getListTaskController);
 
 /**
  * @swagger
- * /task/update/:id:
+ * /task/update/{id}:
  *   put:
  *     summary: update task
  *     description: update task
@@ -117,11 +134,16 @@ taskRoute.get("/get-list", authMiddleware, getListTaskController);
  *       200:
  *         description: Successful operation
  */
-taskRoute.put("/update/:id", authMiddleware, updateTaskController);
+taskRoute.put(
+  "/update/:id",
+  authMiddleware,
+  validate(updateTaskValidate),
+  updateTaskController
+);
 
 /**
  * @swagger
- * /tasks/delete/:id:
+ * /task/delete/{id}:
  *   delete:
  *     summary: delete task
  *     description: delete task

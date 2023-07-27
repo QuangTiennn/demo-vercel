@@ -3,6 +3,11 @@ import {
   loginController,
   registerController,
 } from "../controller/auth.controller.js";
+import { validate } from "../middlewares/validate.middleware.js";
+import {
+  loginValidate,
+  registerValidate,
+} from "../validations/auth.validation.js";
 
 // Initialization
 const authRoute = Router();
@@ -35,7 +40,7 @@ const authRoute = Router();
  *       200:
  *         description: Successful operation
  */
-authRoute.post("/register", registerController);
+authRoute.post("/register", validate(registerValidate), registerController);
 
 /**
  * @swagger
@@ -60,6 +65,6 @@ authRoute.post("/register", registerController);
  *       200:
  *         description: Successful operation
  */
-authRoute.post("/login", loginController);
+authRoute.post("/login", validate(loginValidate), loginController);
 
 export default authRoute;
