@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src -d lib",
-    "start": "nodemon --exec node app.js",
+    "start": "NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon --exec babel-node app.js",
     "dev": "NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon --exec babel-node app.js"
   },
   "keywords": [],
