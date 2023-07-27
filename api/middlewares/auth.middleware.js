@@ -1,9 +1,18 @@
+import jwt from "jsonwebtoken";
+import { STATUS_CODE } from "../constants/common.constant.js";
+import { MESSAGES } from "../constants/messages.constant.js";
+import { handleErrorResponse } from "../helpers/response.helper.js";
+
 export const authMiddleware = (req, res, next) => {
   const token = req.header("Authorization");
 
   // Check if the token exists and starts with 'Bearer '
   if (!token || !token.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Authentication required." });
+    return handleErrorResponse(
+      res,
+      STATUS_CODE.UNAUTHORIZED,
+      MESSAGES.AUTH_REQUIRED
+    );
   }
 
   // Extract the token value
@@ -11,7 +20,7 @@ export const authMiddleware = (req, res, next) => {
 
   try {
     // Verify the token using the secret key
-    const decodedToken = jwt.verify(tokenValue, SECRET_KEY);
+    const decodedToken = jwt.verify(tokenValue, "laskjdefaksdherusdlak");
 
     // Add the decoded token to the request object for further use
     req.user = decodedToken;
@@ -20,6 +29,6 @@ export const authMiddleware = (req, res, next) => {
     next();
   } catch (error) {
     // If the token is invalid or expired, return an error response
-    return res.status(401).json({ message: "Invalid or expired token." });
+    return handleErrorResponse(res, error.message);
   }
 };

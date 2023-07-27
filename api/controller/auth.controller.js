@@ -9,11 +9,11 @@ export const registerController = async (req, res) => {
     const payload = req.body;
     const result = await register(payload);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 
@@ -22,10 +22,10 @@ export const loginController = async (req, res) => {
     const payload = req.body;
     const result = await login(payload);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };

@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { TASK_STATUS } from "../constants";
 
 export const createTaskValidate = {
   body: Joi.object().keys({
@@ -11,6 +12,8 @@ export const updateTaskValidate = {
   body: Joi.object().keys({
     name: Joi.string().optional(),
     description: Joi.string().optional(),
-    status: Joi.string().optional(),
+    status: Joi.string()
+      .valid(...Object.keys(TASK_STATUS))
+      .optional(),
   }),
 };

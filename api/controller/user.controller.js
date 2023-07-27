@@ -15,11 +15,11 @@ export const updateUserProfileController = async (req, Requests) => {
     const payload = req.body;
     const result = await updateUserProfile(id, payload);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 export const deleteUserController = async (req, Requests) => {
@@ -28,11 +28,11 @@ export const deleteUserController = async (req, Requests) => {
 
     const result = await deleteUser(id);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 export const getMeController = async (req, Requests) => {
@@ -41,10 +41,10 @@ export const getMeController = async (req, Requests) => {
 
     const result = await getMe(id);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };

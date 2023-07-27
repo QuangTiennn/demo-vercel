@@ -17,11 +17,11 @@ export const createTaskController = async (req, res) => {
     const payload = req.body;
     const result = await createTask(id, payload);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 
@@ -32,11 +32,11 @@ export const getDetailTaskController = async (req, res) => {
 
     const result = await getDetail(id, taskId);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 
@@ -46,11 +46,11 @@ export const getListTaskController = async (req, res) => {
     const { limit, page } = req.query;
     const result = await getList(id, Number(limit), Number(page));
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 
@@ -61,11 +61,11 @@ export const updateTaskController = async (req, res) => {
     const payload = req.body;
     const result = await updateTask(id, taskId, payload);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };
 
@@ -76,10 +76,10 @@ export const deleteTaskController = async (req, res) => {
 
     const result = await deleteTask(id, taskId);
     if (!result.success) {
-      handleErrorResponse(res, result.status_code, result.message);
+      handleErrorResponse(res, result.message, result.status_code);
     }
     handleSuccessResponse(res, result);
   } catch (error) {
-    handleErrorResponse(res);
+    handleErrorResponse(res, error.message);
   }
 };

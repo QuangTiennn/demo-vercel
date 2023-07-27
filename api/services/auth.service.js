@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
 import { MESSAGES, STATUS_CODE } from "../constants/index.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import userModel from "../models/user.model.js";
@@ -49,8 +49,10 @@ export const login = async (payload) => {
       expiresIn: "30d",
     });
 
-    return successResponse();
+    return successResponse({ token });
   } catch (error) {
+    console.log(error, "[<<<------- error ------->>>]");
+
     return errorResponse();
   }
 };
