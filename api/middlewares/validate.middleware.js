@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { pick } from "../helpers/index";
+import { pick } from "../helpers/index.js";
 
 export const validate = (schema) => (req, res, next) => {
   const validSchema = pick(schema, ["params", "query", "body", "files"]);
