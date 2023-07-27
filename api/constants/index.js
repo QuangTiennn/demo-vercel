@@ -1,2 +1,2 @@
-export * from "./common.constant";
-export * from "./messages.constant";
+export * from "./common.constant.js";
+export * from "./messages.constant.js";
