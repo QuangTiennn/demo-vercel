@@ -1,5 +1,7 @@
 import Joi from "joi";
+import { STATUS_CODE } from "../constants/common.constant.js";
 import { pick } from "../helpers/index.js";
+import { handleErrorResponse } from "../helpers/response.helper.js";
 
 export const validate = (schema) => (req, res, next) => {
   const validSchema = pick(schema, ["params", "query", "body", "files"]);
@@ -11,8 +13,6 @@ export const validate = (schema) => (req, res, next) => {
     .validate(object);
 
   if (error) {
-    console.log(error, "[<<<------- error ------->>>]");
-
     const errorMessage = error.details[0].message;
     // .map((details) => details.message)
     // .join(", ");
