@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { TASK_STATUS } from "../constants";
+import { TASK_STATUS } from "../constants/index.js";
 
 export const createTaskValidate = {
   body: Joi.object().keys({
