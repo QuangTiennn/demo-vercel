@@ -1,4 +1,5 @@
 import { MESSAGES, STATUS_CODE } from "../constants/index.js";
+import { currentTime } from "../helpers/index.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import taskModel from "../models/task.model.js";
 import userModel from "../models/user.model.js";
@@ -7,35 +8,44 @@ export const createTask = async (id, payload) => {
     const user = await userModel.findById(id);
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+      return errorResponse(MESSAGES.USER_NOT_EXIST, STATUS_CODE.BAD_REQUEST);
     }
 
     const task = await taskModel.create({ ...payload, created_by: user._id });
 
     if (!task) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(task);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };
 
 export const getDetail = async (userId, taskId) => {
   try {
-    const task = await taskModel.findOne({
-      _id: taskId,
-      created_by: userId,
-    });
+    const task = await taskModel
+      .findOne({
+        _id: taskId,
+        created_by: userId,
+        deletedAt: null,
+      })
+      .populate([
+        {
+          path: "created_by",
+          model: userModel,
+          select: ["-password"],
+        },
+      ]);
 
     if (!task) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.TASK_NOT_EXISTED);
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(task);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };
 
@@ -48,6 +58,7 @@ export const getList = async (userId, limit, page, filter) => {
         {
           path: "created_by",
           model: userModel,
+          select: ["-password"],
         },
       ],
     };
@@ -59,11 +70,19 @@ export const getList = async (userId, limit, page, filter) => {
     if (filter && filter.status) {
       conditions["status"] = filter.status;
     }
-    const tasks = await taskModel.paginate({ created_by: userId }, options);
+    if (filter && filter.deleted == true) {
+      conditions["deletedAt"] = {
+        $ne: null,
+      };
+    }
+
+    const tasks = await taskModel.paginate(conditions, options);
 
     return successResponse(tasks);
   } catch (error) {
-    return errorResponse();
+    console.log(error, "[<<<------- error ------->>>]");
+
+    return errorResponse(error.message);
   }
 };
 
@@ -72,10 +91,11 @@ export const updateTask = async (userId, taskId, payload) => {
     const task = await taskModel.findOne({
       _id: taskId,
       created_by: userId,
+      deletedAt: null,
     });
 
     if (!task) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.TASK_NOT_EXISTED);
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
     }
 
     const updatedTask = await taskModel.findByIdAndUpdate(task._id, payload, {
@@ -83,12 +103,12 @@ export const updateTask = async (userId, taskId, payload) => {
     });
 
     if (!updatedTask) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(updatedTask);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };
 
@@ -97,20 +117,27 @@ export const deleteTask = async (userId, taskId) => {
     const task = await taskModel.findOne({
       _id: taskId,
       created_by: userId,
+      deletedAt: null,
     });
 
     if (!task) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.TASK_NOT_EXISTED);
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
     }
 
-    const deletedTask = await taskModel.deleteOne(task._id);
+    const deletedTask = await taskModel.findOneAndUpdate(
+      task._id,
+      {
+        deletedAt: currentTime,
+      },
+      { new: true }
+    );
 
     if (!deletedTask) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(deletedTask);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };

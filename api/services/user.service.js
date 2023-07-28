@@ -7,11 +7,11 @@ export const getMe = async (id) => {
     const user = await userModel.findById(id);
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+      return errorResponse(MESSAGES.USER_NOT_EXIST, STATUS_CODE.BAD_REQUEST);
     }
     return successResponse(user);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };
 
@@ -20,7 +20,7 @@ export const updateUserProfile = async (id, payload) => {
     const user = await userModel.findById(id);
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+      return errorResponse(MESSAGES.USER_NOT_EXIST, STATUS_CODE.BAD_REQUEST);
     }
 
     if (payload.password) {
@@ -40,12 +40,12 @@ export const updateUserProfile = async (id, payload) => {
       .select("-password");
 
     if (!updatedUser) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(updatedUser);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };
 
@@ -54,17 +54,17 @@ export const deleteUser = async (id) => {
     const user = await userModel.findById(id);
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+      return errorResponse(MESSAGES.USER_NOT_EXIST, STATUS_CODE.BAD_REQUEST);
     }
 
     const deleteUser = await userModel.deleteOne({ _id: user._id });
 
     if (!deleteUser) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse();
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message);
   }
 };

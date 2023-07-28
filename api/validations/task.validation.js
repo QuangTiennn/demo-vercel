@@ -17,3 +17,12 @@ export const updateTaskValidate = {
       .optional(),
   }),
 };
+
+export const getListTaskValidate = {
+  query: Joi.object().keys({
+    limit: Joi.number().optional().default(99999999),
+    page: Joi.number().optional().default(1),
+    status: Joi.string().optional().allow(null),
+    deleted: Joi.boolean().optional().allow(null).default(false),
+  }),
+};

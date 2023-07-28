@@ -12,8 +12,8 @@ export const successResponse = (
 };
 
 export const errorResponse = (
-  statusCode = 500,
-  message = "Internal server error"
+  message = "Internal server error",
+  statusCode = 500
 ) => {
   return {
     status_code: statusCode,
@@ -24,8 +24,8 @@ export const errorResponse = (
 
 export const handleErrorResponse = (
   res,
-  statusCode = 500,
-  message = "Internal server error"
+  message = "Internal server error",
+  statusCode = 500
 ) => {
   res.status(statusCode).json({
     status_code: statusCode,

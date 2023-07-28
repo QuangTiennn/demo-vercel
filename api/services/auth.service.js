@@ -8,7 +8,7 @@ export const register = async (payload) => {
     const userExisted = await userModel.findOne({ email: payload.email });
 
     if (userExisted) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_EXISTED);
+      return errorResponse(MESSAGES.USER_EXISTED, STATUS_CODE.BAD_REQUEST);
     }
 
     const pwHashed = await bcrypt.hash(payload.password, 10);
@@ -19,11 +19,11 @@ export const register = async (payload) => {
     });
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.FAIL);
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
     return successResponse(user);
   } catch (error) {
-    return errorResponse();
+    return errorResponse(error.message, STATUS_CODE.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -32,7 +32,7 @@ export const login = async (payload) => {
     const user = await userModel.findOne({ email: payload.email });
 
     if (!user) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.USER_NOT_EXIST);
+      return errorResponse(MESSAGES.USER_NOT_EXIST, STATUS_CODE.BAD_REQUEST);
     }
 
     const comparePassword = await bcrypt.compare(
@@ -41,7 +41,7 @@ export const login = async (payload) => {
     );
 
     if (!comparePassword) {
-      return errorResponse(STATUS_CODE.BAD_REQUEST, MESSAGES.WRONG_PASSWORD);
+      return errorResponse(MESSAGES.WRONG_PASSWORD, STATUS_CODE.BAD_REQUEST);
     }
 
     const jwtSecret = process.env.JWT_SECRET || "laskjdefaksdherusdlak";
@@ -51,8 +51,6 @@ export const login = async (payload) => {
 
     return successResponse({ token });
   } catch (error) {
-    console.log(error, "[<<<------- error ------->>>]");
-
-    return errorResponse();
+    return errorResponse(error.message, STATUS_CODE.INTERNAL_SERVER_ERROR);
   }
 };

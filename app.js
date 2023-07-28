@@ -48,8 +48,8 @@ const options = {
     ],
     servers: [
       {
-        // url: "http://localhost:3000/api/v1",
-        url: "http://178.128.110.134:3000/api/v1",
+        url: "http://localhost:3000/api/v1",
+        // url: "http://178.128.110.134:3000/api/v1",
       },
     ],
   },
@@ -67,6 +67,12 @@ app.use(
 );
 app.use("/api/v1", routes);
 
+app.use((err, req, res, next) => {
+  res.locals.error = err;
+  const status = err.status || 500;
+  res.status(status);
+  res.render("error");
+});
 app.listen(port, async () => {
   await connectDatabase();
   console.log(`Example app listening on port ${port}`);

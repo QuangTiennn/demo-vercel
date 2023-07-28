@@ -11,6 +11,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
   createTaskValidate,
+  getListTaskValidate,
   updateTaskValidate,
 } from "../validations/task.validation.js";
 
@@ -77,7 +78,7 @@ taskRoute.get("/get-detail/:id", authMiddleware, getDetailTaskController);
  *     tags: [Task]
  *     parameters:
  *       - in: query
- *         name: offset
+ *         name: page
  *         schema:
  *           type: integer
  *         description: The number of items to skip before starting to collect the result set
@@ -100,7 +101,12 @@ taskRoute.get("/get-detail/:id", authMiddleware, getDetailTaskController);
  *       200:
  *         description: Successful operation
  */
-taskRoute.get("/get-list", authMiddleware, getListTaskController);
+taskRoute.get(
+  "/get-list",
+  authMiddleware,
+  validate(getListTaskValidate),
+  getListTaskController
+);
 
 /**
  * @swagger

@@ -43,8 +43,13 @@ export const getDetailTaskController = async (req, res) => {
 export const getListTaskController = async (req, res) => {
   try {
     const id = req.user._id;
-    const { limit, page } = req.query;
-    const result = await getList(id, Number(limit), Number(page));
+    const { limit, page, deleted, status } = req.query;
+    console.log(req.query, "[<<<------- req.query ------->>>]");
+
+    const result = await getList(id, Number(limit), Number(page), {
+      deleted,
+      status,
+    });
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }

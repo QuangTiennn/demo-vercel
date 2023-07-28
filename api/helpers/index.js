@@ -84,3 +84,5 @@ export const sortData = (data, field, order) => {
 
   return sortedData;
 };
+
+export const currentTime = new Date().toISOString();
