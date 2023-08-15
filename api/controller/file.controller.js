@@ -1,8 +1,8 @@
 import {
   handleErrorResponse,
   handleSuccessResponse,
-} from "../helpers/response.helper";
-import { uploadImage } from "../services/file.service";
+} from "../helpers/response.helper.js";
+import { uploadImage } from "../services/file.service.js";
 
 export const uploadImageController = (req, res) => {
   try {

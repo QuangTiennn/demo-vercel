@@ -1,5 +1,5 @@
-import { MESSAGES } from "../constants";
-import { errorResponse, successResponse } from "../helpers/response.helper";
+import { MESSAGES } from "../constants.js";
+import { errorResponse, successResponse } from "../helpers/response.helper.js";
 
 export const uploadImage = (file) => {
   try {
