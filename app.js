@@ -5,15 +5,12 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { connectDatabase } from "./api/configs/db.config.js";
 import routes from "./api/routes/index.route.js";
+
 const app = express();
 const port = 3000;
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-app.get("/users", (req, res) => {
-  res.send("user!");
 });
 
 const corsOptions = {
@@ -23,6 +20,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use(express.static("public"));
+app.use("/public/images", express.static("public/images"));
+
 const options = {
   definition: {
     openapi: "3.1.0",
@@ -73,7 +74,7 @@ app.use((err, req, res, next) => {
   res.locals.error = err;
   const status = err.status || 500;
   res.status(status);
-  res.render("error");
+  // res.render("error");
 });
 app.listen(port, async () => {
   await connectDatabase();

@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import authRoute from "./auth.route.js";
+import fileRoute from "./file.route.js";
 import taskRoute from "./task.route.js";
 import userRoute from "./user.route.js";
 dotenv.config();
@@ -18,6 +19,10 @@ const defaultRoutes = [
   {
     path: "/task",
     route: taskRoute,
+  },
+  {
+    path: "/file",
+    route: fileRoute,
   },
 ];
 
