@@ -44,7 +44,6 @@ export const getListTaskController = async (req, res) => {
   try {
     const id = req.user._id;
     const { limit, page, deleted, status } = req.query;
-    console.log(req.query, "[<<<------- req.query ------->>>]");
 
     const result = await getList(id, Number(limit), Number(page), {
       deleted,

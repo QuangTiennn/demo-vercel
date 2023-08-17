@@ -4,21 +4,21 @@ import { MESSAGES } from "../constants/messages.constant.js";
 import { handleErrorResponse } from "../helpers/response.helper.js";
 
 export const authMiddleware = (req, res, next) => {
-  const token = req.header("Authorization");
-
-  // Check if the token exists and starts with 'Bearer '
-  if (!token || !token.startsWith("Bearer ")) {
-    return handleErrorResponse(
-      res,
-      STATUS_CODE.UNAUTHORIZED,
-      MESSAGES.AUTH_REQUIRED
-    );
-  }
-
-  // Extract the token value
-  const tokenValue = token.replace("Bearer ", "");
-
   try {
+    const token = req.header("Authorization");
+
+    // Check if the token exists and starts with 'Bearer '
+    if (!token || !token.startsWith("Bearer ")) {
+      return handleErrorResponse(
+        res,
+        MESSAGES.AUTH_REQUIRED,
+        STATUS_CODE.UNAUTHORIZED
+      );
+    }
+
+    // Extract the token value
+    const tokenValue = token.replace("Bearer ", "");
+
     // Verify the token using the secret key
     const decodedToken = jwt.verify(tokenValue, "laskjdefaksdherusdlak");
 

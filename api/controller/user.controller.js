@@ -8,7 +8,7 @@ import {
   updateUserProfile,
 } from "../services/user.service.js";
 
-export const updateUserProfileController = async (req, Requests) => {
+export const updateUserProfileController = async (req, res) => {
   try {
     const id = req.user._id;
 
@@ -22,7 +22,7 @@ export const updateUserProfileController = async (req, Requests) => {
     handleErrorResponse(res, error.message);
   }
 };
-export const deleteUserController = async (req, Requests) => {
+export const deleteUserController = async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -35,7 +35,7 @@ export const deleteUserController = async (req, Requests) => {
     handleErrorResponse(res, error.message);
   }
 };
-export const getMeController = async (req, Requests) => {
+export const getMeController = async (req, res) => {
   try {
     const id = req.user._id;
 

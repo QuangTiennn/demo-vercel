@@ -34,6 +34,8 @@ const userRoute = Router();
  *                 type: string
  *               age:
  *                 type: number
+ *               avatar:
+ *                 type: string
  *
  *     responses:
  *       200:
@@ -61,6 +63,7 @@ userRoute.put(
  *         description: Successful operation
  */
 userRoute.delete("/delete/:id", authMiddleware, deleteUserController);
+
 /**
  * @swagger
  * /user/get-me:

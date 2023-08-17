@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema(
     age: {
       type: Number,
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
