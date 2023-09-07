@@ -5,6 +5,8 @@ import {
   deleteTaskController,
   getDetailTaskController,
   getListTaskController,
+  multipleDeleteTaskController,
+  multipleRestoreTaskController,
   updateTaskController,
 } from "../controller/task.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -12,6 +14,7 @@ import { validate } from "../middlewares/validate.middleware.js";
 import {
   createTaskValidate,
   getListTaskValidate,
+  multipleIds,
   updateTaskValidate,
 } from "../validations/task.validation.js";
 
@@ -167,5 +170,64 @@ taskRoute.put(
  *         description: Successful operation
  */
 taskRoute.delete("/delete/:id", authMiddleware, deleteTaskController);
+
+/**
+ * @swagger
+ * /task/multiple-delete:
+ *   delete:
+ *     summary: delete multiple task
+ *     description: delete multiple task
+ *     tags: [Task]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *               type :
+ *                 type: string
+ *
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+taskRoute.delete(
+  "/multiple-delete",
+  authMiddleware,
+  validate(multipleIds),
+  multipleDeleteTaskController
+);
+/**
+ * @swagger
+ * /task/multiple-restore:
+ *   put:
+ *     summary: restore multiple task
+ *     description: restore multiple task
+ *     tags: [Task]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *               type :
+ *                 type: string
+ *
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+taskRoute.put(
+  "/multiple-restore",
+  authMiddleware,
+  validate(multipleIds),
+  multipleRestoreTaskController
+);
 
 export default taskRoute;

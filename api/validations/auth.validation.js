@@ -7,6 +7,7 @@ export const registerValidate = {
     password: Joi.string().required(),
     age: Joi.number().optional(),
     code: Joi.string().required(),
+    avatar: Joi.string().optional(),
   }),
 };
 export const loginValidate = {

@@ -15,3 +15,8 @@ export const TASK_STATUS = {
   DONE: "DONE",
   FAIL: "FAIL",
 };
+
+export const TYPE_DELETE_ALL_RESTORE_ALL = {
+  DELETE_ALL: "DELETE_ALL",
+  RESTORE_ALL: "RESTORE_ALL",
+};

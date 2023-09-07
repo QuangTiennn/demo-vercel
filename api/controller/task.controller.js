@@ -7,6 +7,8 @@ import {
   deleteTask,
   getDetail,
   getList,
+  multipleDeleteTask,
+  multipleRestoreTask,
   updateTask,
 } from "../services/task.service.js";
 
@@ -79,6 +81,35 @@ export const deleteTaskController = async (req, res) => {
     const taskId = req.params.id;
 
     const result = await deleteTask(id, taskId);
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+
+export const multipleDeleteTaskController = async (req, res) => {
+  try {
+    const id = req.user._id;
+    const result = await multipleDeleteTask(id, req.body);
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+export const multipleRestoreTaskController = async (req, res) => {
+  try {
+    const id = req.user._id;
+    console.log(req.body, "[<<<------- req.body ------->>>]");
+
+    const result = await multipleRestoreTask(id, req.body);
+    console.log(result, "[<<<------- result ------->>>]");
+
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }

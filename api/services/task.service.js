@@ -1,4 +1,8 @@
-import { MESSAGES, STATUS_CODE } from "../constants/index.js";
+import {
+  MESSAGES,
+  STATUS_CODE,
+  TYPE_DELETE_ALL_RESTORE_ALL,
+} from "../constants/index.js";
 import { currentTime } from "../helpers/index.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import taskModel from "../models/task.model.js";
@@ -70,18 +74,19 @@ export const getList = async (userId, limit, page, filter) => {
     if (filter && filter.status) {
       conditions["status"] = filter.status;
     }
-    if (filter && filter.deleted == true) {
-      conditions["deletedAt"] = {
-        $ne: null,
-      };
-    }
+
+    filter && filter.deleted == true
+      ? (conditions["deletedAt"] = {
+          $ne: null,
+        })
+      : (conditions["deletedAt"] = {
+          $eq: null,
+        });
 
     const tasks = await taskModel.paginate(conditions, options);
 
     return successResponse(tasks);
   } catch (error) {
-    console.log(error, "[<<<------- error ------->>>]");
-
     return errorResponse(error.message);
   }
 };
@@ -137,6 +142,66 @@ export const deleteTask = async (userId, taskId) => {
     }
 
     return successResponse(deletedTask);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+
+export const multipleDeleteTask = async (id, payload) => {
+  try {
+    let result;
+    if (payload.type === TYPE_DELETE_ALL_RESTORE_ALL.DELETE_ALL) {
+      result = await taskModel.deleteMany({
+        created_by: id,
+        deletedAt: { $ne: null },
+      });
+    } else {
+      result = await taskModel.deleteMany({
+        created_by: id,
+        _id: { $in: payload.ids },
+      });
+    }
+    if (!result) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse();
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+export const multipleRestoreTask = async (id, payload) => {
+  try {
+    let result;
+    if (payload.type === TYPE_DELETE_ALL_RESTORE_ALL.RESTORE_ALL) {
+      result = await taskModel.updateMany(
+        {
+          created_by: id,
+          deletedAt: { $ne: null },
+        },
+        {
+          $set: { deletedAt: null },
+        },
+        { new: true }
+      );
+    } else {
+      result = await taskModel.updateMany(
+        {
+          created_by: id,
+          _id: { $in: payload.ids },
+        },
+        {
+          $set: { deletedAt: null },
+        },
+        { new: true }
+      );
+    }
+
+    if (!result) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse();
   } catch (error) {
     return errorResponse(error.message);
   }

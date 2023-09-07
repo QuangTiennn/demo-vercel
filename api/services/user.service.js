@@ -25,7 +25,6 @@ export const updateUserProfile = async (id, payload) => {
 
     if (payload.password) {
       const pwHashed = await bcrypt.hash(payload.password, 10);
-      np;
       payload.password = pwHashed;
     }
 

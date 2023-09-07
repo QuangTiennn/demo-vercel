@@ -60,3 +60,16 @@ export const forgotPasswordController = async (req, res) => {
     handleErrorResponse(res, error.message);
   }
 };
+
+export const changePasswordController = async (req, res) => {
+  try {
+    const payload = req.body;
+    const result = await changePassword(payload);
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
