@@ -29,3 +29,10 @@ export const forgotPasswordValidate = {
     code: Joi.string().required(),
   }),
 };
+
+export const changePasswordValidate = {
+  body: Joi.object().keys({
+    password: Joi.string().required(),
+    old_password: Joi.string().required(),
+  }),
+};

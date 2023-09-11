@@ -3,6 +3,7 @@ import {
   handleSuccessResponse,
 } from "../helpers/response.helper.js";
 import {
+  changePassword,
   forgotPassword,
   login,
   register,
@@ -64,7 +65,9 @@ export const forgotPasswordController = async (req, res) => {
 export const changePasswordController = async (req, res) => {
   try {
     const payload = req.body;
-    const result = await changePassword(payload);
+    const id = req.user._id;
+
+    const result = await changePassword(id, payload);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }

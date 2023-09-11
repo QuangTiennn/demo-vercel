@@ -1,12 +1,15 @@
 import { Router } from "express";
 import {
+  changePasswordController,
   forgotPasswordController,
   loginController,
   registerController,
   sendOTPController,
 } from "../controller/auth.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
+  changePasswordValidate,
   forgotPasswordValidate,
   loginValidate,
   registerValidate,
@@ -123,6 +126,35 @@ authRoute.post(
   "/forgot-password",
   validate(forgotPasswordValidate),
   forgotPasswordController
+);
+
+/**
+ * @swagger
+ * /auth/change-password:
+ *   put:
+ *     summary: forgot password
+ *     description: forgot password
+ *     tags : [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *               old_password:
+ *                 type : string
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+authRoute.put(
+  "/change-password",
+  authMiddleware,
+  validate(changePasswordValidate),
+  changePasswordController
 );
 
 export default authRoute;
