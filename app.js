@@ -52,7 +52,7 @@ const options = {
         url: "http://localhost:3000/api/v1",
       },
       {
-        url: "http://178.128.110.134:3000/api/v1",
+        url: "http://206.189.150.98:3000/api/v1",
       },
     ],
   },
