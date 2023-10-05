@@ -9,10 +9,6 @@ import routes from "./api/routes/index.route.js";
 const app = express();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 const corsOptions = {
   origin: ["*"],
 };
@@ -75,6 +71,18 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   res.status(status);
   // res.render("error");
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.get("/callbacks/sign_in_with_apple", (req, res) => {
+  console.log(123123, "[<<<------- 123123 ------->>>]");
+
+  res.redirect(
+    "intent://callback?${https://swy-eat.com}#Intent;package=com.du.swyeat;scheme=signinwithapple;end"
+  );
 });
 app.listen(port, async () => {
   await connectDatabase();
