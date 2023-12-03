@@ -67,3 +67,18 @@ export const deleteUser = async (id) => {
     return errorResponse(error.message);
   }
 };
+
+export const getList = async (userId, limit, page) => {
+  try {
+    const options = {
+      page,
+      limit,
+    };
+
+    const users = await userModel.paginate({}, options);
+
+    return successResponse(users);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};

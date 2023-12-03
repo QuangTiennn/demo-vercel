@@ -2,18 +2,14 @@ import {
   handleErrorResponse,
   handleSuccessResponse,
 } from "../helpers/response.helper.js";
-import {
-  deleteUser,
-  getMe,
-  updateUserProfile,
-} from "../services/user.service.js";
+import { createChatRoom, getChatRoomDetail } from "../services/chat.service.js";
 
-export const updateUserProfileController = async (req, res) => {
+export const createChatRoomController = async (req, res) => {
   try {
-    const id = req.user._id;
-
+    const userId = req.user._id;
     const payload = req.body;
-    const result = await updateUserProfile(id, payload);
+
+    const result = await createChatRoom(payload, userId);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }
@@ -22,24 +18,34 @@ export const updateUserProfileController = async (req, res) => {
     handleErrorResponse(res, error.message);
   }
 };
-export const deleteUserController = async (req, res) => {
+
+export const getListChatRoomController = async (req, res) => {
+  try {
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+
+export const getChatRoomDetailController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userId = req.user._id;
+    const { limit, page } = req.query;
+    const result = await getChatRoomDetail(id, userId, limit, page);
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+
+export const deleteChatRoomController = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const result = await deleteUser(id);
-    if (!result.success) {
-      handleErrorResponse(res, result.message, result.status_code);
-    }
-    handleSuccessResponse(res, result);
-  } catch (error) {
-    handleErrorResponse(res, error.message);
-  }
-};
-export const getMeController = async (req, res) => {
-  try {
-    const id = req.user._id;
-
-    const result = await getMe(id);
+    const result = await deleteChatRoom(id);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }
@@ -49,17 +55,4 @@ export const getMeController = async (req, res) => {
   }
 };
 
-export const getListUserController = async (req, res) => {
-  try {
-    const id = req.user._id;
-    const { limit, page } = req.query;
-
-    const result = await getList(id, Number(limit), Number(page));
-    if (!result.success) {
-      handleErrorResponse(res, result.message, result.status_code);
-    }
-    handleSuccessResponse(res, result);
-  } catch (error) {
-    handleErrorResponse(res, error.message);
-  }
-};
+export const createMessage = async () => {};

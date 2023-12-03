@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import authRoute from "./auth.route.js";
+import chatRoute from "./chat.route.js";
 import fileRoute from "./file.route.js";
 import taskRoute from "./task.route.js";
 import userRoute from "./user.route.js";
@@ -23,6 +24,10 @@ const defaultRoutes = [
   {
     path: "/file",
     route: fileRoute,
+  },
+  {
+    path: "/chat",
+    route: chatRoute,
   },
 ];
 

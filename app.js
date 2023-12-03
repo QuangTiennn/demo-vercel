@@ -1,10 +1,13 @@
 import cors from "cors";
 import express from "express";
+import { createServer } from "http";
 import morgan from "morgan";
+import { Server } from "socket.io";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { connectDatabase } from "./api/configs/db.config.js";
 import routes from "./api/routes/index.route.js";
+import { createMessage } from "./api/services/chat.service.js";
 
 const app = express();
 const port = 3000;
@@ -20,6 +23,36 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use("/public/images", express.static("public/images"));
 
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("New user connected:", socket.id);
+
+  socket.on("findMatch", async () => {
+    // Implement matchmaking logic here
+    // ...
+  });
+
+  socket.on("sendMessage", async (messageData, recipientId) => {
+    // Create and save the message to the database
+    const data = {
+      roomId: messageData.roomId || null,
+      senderId: socket.id,
+      recipientId,
+      content: messageData.content,
+    };
+    await createMessage(data);
+
+    // Broadcast the message to the recipient
+    io.to(recipientId).emit("receiveMessage", message, socket.id);
+  });
+});
 const options = {
   definition: {
     openapi: "3.1.0",
@@ -77,13 +110,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/callbacks/sign_in_with_apple", (req, res) => {
-  console.log(123123, "[<<<------- 123123 ------->>>]");
-
-  res.redirect(
-    "intent://callback?${https://swy-eat.com}#Intent;package=com.du.swyeat;scheme=signinwithapple;end"
-  );
-});
 app.listen(port, async () => {
   await connectDatabase();
   console.log(`Example app listening on port ${port}`);
