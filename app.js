@@ -32,12 +32,9 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("New user connected:", socket.id);
+  console.log(socket, "[<<<------- socket ------->>>]");
 
-  socket.on("findMatch", async () => {
-    // Implement matchmaking logic here
-    // ...
-  });
+  console.log("New user connected:", socket.id);
 
   socket.on("sendMessage", async (messageData, recipientId) => {
     // Create and save the message to the database

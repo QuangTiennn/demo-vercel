@@ -2,7 +2,11 @@ import {
   handleErrorResponse,
   handleSuccessResponse,
 } from "../helpers/response.helper.js";
-import { createChatRoom, getChatRoomDetail } from "../services/chat.service.js";
+import {
+  createChatRoom,
+  deleteChatRoom,
+  getChatRoomDetail,
+} from "../services/chat.service.js";
 
 export const createChatRoomController = async (req, res) => {
   try {

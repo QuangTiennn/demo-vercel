@@ -12,7 +12,7 @@ const chatRoute = Router();
 
 /**
  * @swagger
- * /chat/room:
+ * /chat/create:
  *   post:
  *     summary: create room
  *     description: create room

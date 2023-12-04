@@ -4,6 +4,7 @@ import {
 } from "../helpers/response.helper.js";
 import {
   deleteUser,
+  getList,
   getMe,
   updateUserProfile,
 } from "../services/user.service.js";
