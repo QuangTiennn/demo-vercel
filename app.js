@@ -7,7 +7,6 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { connectDatabase } from "./api/configs/db.config.js";
 import routes from "./api/routes/index.route.js";
-import { createMessage } from "./api/services/chat.service.js";
 
 const app = express();
 const port = 3000;
@@ -31,25 +30,6 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  console.log(socket, "[<<<------- socket ------->>>]");
-
-  console.log("New user connected:", socket.id);
-
-  socket.on("sendMessage", async (messageData, recipientId) => {
-    // Create and save the message to the database
-    const data = {
-      roomId: messageData.roomId || null,
-      senderId: socket.id,
-      recipientId,
-      content: messageData.content,
-    };
-    await createMessage(data);
-
-    // Broadcast the message to the recipient
-    io.to(recipientId).emit("receiveMessage", message, socket.id);
-  });
-});
 const options = {
   definition: {
     openapi: "3.1.0",

@@ -1,19 +1,28 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import { createMessage } from "./api/services/chat.service";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log("Connected");
-  socket.on("msg_from_client", (from, msg) => {
-    console.log(msg);
-    console.log(from);
-    console.log(`Message is ${from}`, msg);
-  });
-  socket.on("disconnect", (msg) => {
-    console.log("Disconnected");
+  console.log("New user connected:", socket.id);
+
+  socket.on("sendMessage", async (messageData, recipientId) => {
+    const objMessage = JSON.parse(messageData);
+
+    // Create and save the message to the database
+    const data = {
+      roomId: objMessage.roomId || null,
+      senderId: socket.id,
+      recipientId,
+      content: objMessage.content,
+    };
+    await createMessage(data);
+
+    // Broadcast the message to the recipient
+    io.to(recipientId).emit("receiveMessage", messageData, socket.id);
   });
 });
 
