@@ -76,8 +76,6 @@ export const deleteChatRoom = async (id, userId) => {
 
 export const createMessage = async (data) => {
   try {
-    console.log(data, "[<<<------- data ------->>>]");
-
     const room = await roomModel.findById(data.roomId);
     let newRoom;
 
@@ -96,7 +94,7 @@ export const createMessage = async (data) => {
       message_content: data.content,
     });
 
-    return successResponse("message");
+    return successResponse(message);
   } catch (error) {
     return errorResponse(error.message);
   }
