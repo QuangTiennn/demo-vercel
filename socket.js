@@ -52,14 +52,14 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("send_message", async (data_message) => {
-    const dataRoom = {
+    const dataMessage = {
       room: data_message.roomId,
       message_content: data_message.content,
-      recipient: data_message.recipientId,
+      recipientId: data_message.recipientId,
       sender: user._id,
     };
 
-    const message = await createMessage(dataRoom);
+    const message = await createMessage(dataMessage);
 
     socket.emit(`receive_message/${room?._id}`, message);
   });
