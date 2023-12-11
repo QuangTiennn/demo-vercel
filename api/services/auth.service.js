@@ -135,8 +135,6 @@ export const forgotPassword = async (payload) => {
 
 export const changePassword = async (id, payload) => {
   try {
-    console.log(payload, "[<<<------- payload ------->>>]");
-
     const { old_password } = payload;
 
     const user = await userModel.findById(id);

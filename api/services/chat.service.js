@@ -1,6 +1,6 @@
 import { MESSAGES } from "../constants/messages.constant.js";
 
-import { errorResponse } from "../helpers/response.helper.js";
+import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import messageModel from "../models/message.model.js";
 import roomModel from "../models/room.model.js";
 
@@ -8,8 +8,11 @@ export const createChatRoom = async (payload, userId) => {
   try {
     const { participants } = payload;
 
+    console.log(userId, "[<<<------- userId ------->>>]");
+
     const chatRoomExisted = await roomModel.findOne({
-      participants: { $elemMatch: { $in: participants }, created_by: userId },
+      participants: { $elemMatch: { $in: participants } },
+      created_by: userId,
     });
 
     if (chatRoomExisted) {
@@ -17,7 +20,7 @@ export const createChatRoom = async (payload, userId) => {
     }
 
     const chatRoom = await roomModel.create({
-      participants,
+      participants: participants,
       created_by: userId,
     });
 

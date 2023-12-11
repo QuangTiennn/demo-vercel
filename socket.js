@@ -1,32 +1,74 @@
 import express from "express";
 import http from "http";
+import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
-import { createMessage } from "../demo-vercel/api/services/chat.service.js";
+import { connectDatabase } from "./api/configs/db.config.js";
+import { createMessage } from "./api/controller/chat.controller.js";
+import roomModel from "./api/models/room.model.js";
+import userModel from "./api/models/user.model";
+import { createChatRoom } from "./api/services/chat.service.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-io.on("connection", (socket) => {
-  console.log("New user connected:", socket.id);
+let user;
+let room;
+let userJoinedRoom;
+// Handle connection events
+io.on("connection", async (socket) => {
+  const token = socket.handshake.headers.token;
 
-  socket.on("sendMessage", async (messageData, recipientId) => {
-    const objMessage = JSON.parse(messageData);
+  if (token) {
+    if (!token || !token.startsWith("Bearer ")) {
+      socket.emit("error");
+      return;
+    }
 
-    // Create and save the message to the database
-    const data = {
-      roomId: objMessage.roomId || null,
-      senderId: socket.id,
-      recipientId,
-      content: objMessage.content,
+    // Extract the token value
+    const tokenValue = token.replace("Bearer ", "");
+
+    const decodedToken = jwt.verify(tokenValue, "laskjdefaksdherusdlak");
+
+    user = await userModel.findById(decodedToken._id);
+  }
+
+  socket.on("join_room", async (data) => {
+    const foundRoom = await roomModel.findOne({
+      participants: { $elemMatch: { $in: [data.userId, user._id] } },
+    });
+    room = foundRoom;
+
+    if (!foundRoom) {
+      const newRoom = await createChatRoom(
+        {
+          participants: [data.userId, user._id],
+        },
+        user._id
+      );
+      socket.emit("data-room", newRoom);
+      room = newRoom;
+      return;
+    }
+    socket.emit("data-room", foundRoom);
+  });
+
+  socket.on("send_message", async (data_message) => {
+    const dataRoom = {
+      room: data_message.roomId,
+      message_content: data_message.content,
+      recipient: data_message.recipientId,
+      sender: user._id,
     };
-    await createMessage(data);
 
-    // Broadcast the message to the recipient
-    io.to(recipientId).emit("receiveMessage", messageData, socket.id);
+    const message = await createMessage(dataRoom);
+
+    socket.emit(`receive_message/${room?._id}`, message);
   });
 });
 
-server.listen(5000, () => {
+server.listen(5000, async () => {
+  await connectDatabase();
+
   console.log("Listening to port 5000");
 });
 let count = 0;
