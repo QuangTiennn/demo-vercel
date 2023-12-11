@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import { createMessage } from "../api/services/chat.service.js";
+import { createMessage } from "../demo-vercel/api/services/chat.service.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
