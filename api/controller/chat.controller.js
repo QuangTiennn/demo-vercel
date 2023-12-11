@@ -59,4 +59,4 @@ export const deleteChatRoomController = async (req, res) => {
   }
 };
 
-export const createMessage = async () => {};
+// export const createMessage = async (payload) => {};
