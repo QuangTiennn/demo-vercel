@@ -5,7 +5,9 @@ import {
 import {
   createTask,
   deleteTask,
+  getAllTask,
   getDetail,
+  getDetailWithoutAuthor,
   getList,
   multipleDeleteTask,
   multipleRestoreTask,
@@ -33,6 +35,20 @@ export const getDetailTaskController = async (req, res) => {
     const taskId = req.params.id;
 
     const result = await getDetail(id, taskId);
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+export const getDetailTaskControllerWithoutAuthor = async (req, res) => {
+  try {
+    const id = req.user._id;
+    const taskId = req.params.id;
+
+    const result = await getDetailWithoutAuthor(id, taskId);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }
@@ -105,10 +121,27 @@ export const multipleDeleteTaskController = async (req, res) => {
 export const multipleRestoreTaskController = async (req, res) => {
   try {
     const id = req.user._id;
-    console.log(req.body, "[<<<------- req.body ------->>>]");
 
     const result = await multipleRestoreTask(id, req.body);
-    console.log(result, "[<<<------- result ------->>>]");
+
+    if (!result.success) {
+      handleErrorResponse(res, result.message, result.status_code);
+    }
+    handleSuccessResponse(res, result);
+  } catch (error) {
+    handleErrorResponse(res, error.message);
+  }
+};
+
+export const getAllTaskController = async (req, res) => {
+  try {
+    const id = "";
+    const { limit, page, deleted, status } = req.query;
+
+    const result = await getAllTask(id, Number(limit), Number(page), {
+      deleted,
+      status,
+    });
 
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);

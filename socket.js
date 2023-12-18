@@ -6,6 +6,10 @@ import { connectDatabase } from "./api/configs/db.config.js";
 import roomModel from "./api/models/room.model.js";
 import userModel from "./api/models/user.model";
 import { createChatRoom, createMessage } from "./api/services/chat.service.js";
+import {
+  deleteTaskHasSocket,
+  updateTaskHasSocket,
+} from "./api/services/task.service.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -15,6 +19,8 @@ let room;
 let userJoinedRoom;
 // Handle connection events
 io.on("connection", async (socket) => {
+  console.log("user connected", socket.id);
+
   const token = socket.handshake.headers.token;
 
   if (token) {
@@ -62,6 +68,20 @@ io.on("connection", async (socket) => {
     const message = await createMessage(dataMessage);
 
     socket.emit(`receive_message/${room?._id}`, message);
+  });
+
+  socket.on("delete_task", async (data) => {
+    const objData = JSON.parse(data);
+
+    const deletedTask = await deleteTaskHasSocket(objData.id);
+    socket.broadcast.emit("deleted_task", deletedTask);
+  });
+
+  socket.on("update_task", async (data) => {
+    const objData = JSON.parse(data);
+
+    const updatedTask = await updateTaskHasSocket(objData);
+    socket.broadcast.emit("updated_task", updatedTask);
   });
 });
 

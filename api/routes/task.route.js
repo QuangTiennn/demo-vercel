@@ -3,7 +3,9 @@ import { Router } from "express";
 import {
   createTaskController,
   deleteTaskController,
+  getAllTaskController,
   getDetailTaskController,
+  getDetailTaskControllerWithoutAuthor,
   getListTaskController,
   multipleDeleteTaskController,
   multipleRestoreTaskController,
@@ -228,6 +230,64 @@ taskRoute.put(
   authMiddleware,
   validate(multipleIds),
   multipleRestoreTaskController
+);
+
+/**
+ * @swagger
+ * /task/get-all:
+ *   get:
+ *     summary: get all task
+ *     description: get all task
+ *     tags: [Task]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The number of items to skip before starting to collect the result set
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The numbers of items to return
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: status of task ["PROCESSING", "DONE", "FAIL"]
+ *       - in: query
+ *         name: deleted
+ *         schema:
+ *           type: boolean
+ *         description: get tasks deleted
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+taskRoute.get("/get-all", validate(getListTaskValidate), getAllTaskController);
+
+/**
+ * @swagger
+ * /task/get-detail-without-author/{id}:
+ *   get:
+ *     summary: get task detail
+ *     description: get task detail
+ *     tags: [Task]
+ *     parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
+ *          required: true
+ *          description: The task id
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+taskRoute.get(
+  "/get-detail-without-author/:id",
+  authMiddleware,
+  getDetailTaskControllerWithoutAuthor
 );
 
 export default taskRoute;

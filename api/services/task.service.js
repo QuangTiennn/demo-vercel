@@ -91,6 +91,28 @@ export const getList = async (userId, limit, page, filter) => {
   }
 };
 
+export const updateTaskHasSocket = async (payload) => {
+  try {
+    const { id, ...rest } = payload;
+    const task = await taskModel.findById(id);
+
+    if (!task) {
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
+    }
+
+    const updatedTask = await taskModel.findByIdAndUpdate(task._id, rest, {
+      new: true,
+    });
+
+    if (!updatedTask) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse(updatedTask);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
 export const updateTask = async (userId, taskId, payload) => {
   try {
     const task = await taskModel.findOne({
@@ -202,6 +224,91 @@ export const multipleRestoreTask = async (id, payload) => {
     }
 
     return successResponse();
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+
+export const getAllTask = async (id, limit, page, filter) => {
+  try {
+    const options = {
+      page,
+      limit,
+      populate: [
+        {
+          path: "created_by",
+          model: userModel,
+          select: ["-password"],
+        },
+      ],
+    };
+    let conditions = {};
+    if (filter && filter.status) {
+      conditions["status"] = filter.status;
+    }
+
+    filter && filter.deleted == true
+      ? (conditions["deletedAt"] = {
+          $ne: null,
+        })
+      : (conditions["deletedAt"] = {
+          $eq: null,
+        });
+
+    const tasks = await taskModel.paginate(conditions, options);
+
+    return successResponse(tasks);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+
+export const deleteTaskHasSocket = async (id) => {
+  try {
+    const task = await taskModel.findById(id);
+
+    if (!task) {
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
+    }
+
+    const deletedTask = await taskModel.findOneAndUpdate(
+      task._id,
+      {
+        deletedAt: currentTime,
+      },
+      { new: true }
+    );
+
+    if (!deletedTask) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse(deletedTask);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+
+export const getDetailWithoutAuthor = async (_userId, taskId) => {
+  try {
+    const task = await taskModel
+      .findOne({
+        _id: taskId,
+        deletedAt: null,
+      })
+      .populate([
+        {
+          path: "created_by",
+          model: userModel,
+          select: ["-password"],
+        },
+      ]);
+
+    if (!task) {
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse(task);
   } catch (error) {
     return errorResponse(error.message);
   }
