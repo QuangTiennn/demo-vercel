@@ -7,6 +7,7 @@ import roomModel from "./api/models/room.model.js";
 import userModel from "./api/models/user.model";
 import { createChatRoom, createMessage } from "./api/services/chat.service.js";
 import {
+  createTask,
   deleteTaskHasSocket,
   updateTaskHasSocket,
 } from "./api/services/task.service.js";
@@ -82,6 +83,13 @@ io.on("connection", async (socket) => {
 
     const updatedTask = await updateTaskHasSocket(objData);
     socket.broadcast.emit("updated_task", updatedTask);
+  });
+
+  socket.on("create_task", async (data) => {
+    const objData = JSON.parse(data);
+
+    const createdTask = await createTask(user._id, objData);
+    socket.broadcast.emit("created_task", createdTask);
   });
 });
 
