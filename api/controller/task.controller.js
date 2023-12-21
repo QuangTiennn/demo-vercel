@@ -45,10 +45,9 @@ export const getDetailTaskController = async (req, res) => {
 };
 export const getDetailTaskControllerWithoutAuthor = async (req, res) => {
   try {
-    const id = req.user._id;
     const taskId = req.params.id;
 
-    const result = await getDetailWithoutAuthor(id, taskId);
+    const result = await getDetailWithoutAuthor(taskId);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }

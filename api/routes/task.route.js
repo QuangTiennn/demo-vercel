@@ -286,7 +286,6 @@ taskRoute.get("/get-all", validate(getListTaskValidate), getAllTaskController);
  */
 taskRoute.get(
   "/get-detail-without-author/:id",
-  authMiddleware,
   getDetailTaskControllerWithoutAuthor
 );
 

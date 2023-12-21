@@ -7,7 +7,7 @@ import roomModel from "./api/models/room.model.js";
 import userModel from "./api/models/user.model.js";
 import { createChatRoom, createMessage } from "./api/services/chat.service.js";
 import {
-  createTask,
+  createTaskWithSocket,
   deleteTaskHasSocket,
   updateTaskHasSocket,
 } from "./api/services/task.service.js";
@@ -23,11 +23,12 @@ io.on("connection", async (socket) => {
   console.log("user connected", socket.id);
 
   const token = socket.handshake.headers.token;
-  if (!token || !token.startsWith("Bearer ")) {
-    socket.emit("Authentication Fail");
-    return;
-  }
+
   if (token) {
+    if (!token || !token.startsWith("Bearer ")) {
+      socket.emit("Authentication Fail");
+      return;
+    }
     // Extract the token value
     const tokenValue = token.replace("Bearer ", "");
 
@@ -71,21 +72,27 @@ io.on("connection", async (socket) => {
 
   socket.on("delete_task", async (data) => {
     const objData = JSON.parse(data);
-
+    if (!objData) {
+      socket.emit("JSON ERR");
+    }
     const deletedTask = await deleteTaskHasSocket(objData.id);
     socket.broadcast.emit("deleted_task", deletedTask);
   });
 
   socket.on("update_task", async (data) => {
     const objData = JSON.parse(data);
-
+    if (!objData) {
+      socket.emit("JSON ERR");
+    }
     const updatedTask = await updateTaskHasSocket(objData);
     socket.broadcast.emit("updated_task", updatedTask);
   });
   socket.on("create_task", async (data) => {
     const objData = JSON.parse(data);
-
-    const createdTask = await createTask(user._id, objData);
+    if (!objData) {
+      socket.emit("JSON ERR");
+    }
+    const createdTask = await createTaskWithSocket(user?._id, objData);
     socket.broadcast.emit("created_task", createdTask);
   });
 });

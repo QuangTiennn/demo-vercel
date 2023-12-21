@@ -289,7 +289,7 @@ export const deleteTaskHasSocket = async (id) => {
   }
 };
 
-export const getDetailWithoutAuthor = async (_userId, taskId) => {
+export const getDetailWithoutAuthor = async (taskId) => {
   try {
     const task = await taskModel
       .findOne({
@@ -306,6 +306,20 @@ export const getDetailWithoutAuthor = async (_userId, taskId) => {
 
     if (!task) {
       return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse(task);
+  } catch (error) {
+    return errorResponse(error.message);
+  }
+};
+
+export const createTaskWithSocket = async (id, payload) => {
+  try {
+    const task = await taskModel.create({ ...payload, created_by: id || null });
+
+    if (!task) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
     }
 
     return successResponse(task);
