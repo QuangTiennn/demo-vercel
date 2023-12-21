@@ -23,13 +23,11 @@ io.on("connection", async (socket) => {
   console.log("user connected", socket.id);
 
   const token = socket.handshake.headers.token;
-
+  if (!token || !token.startsWith("Bearer ")) {
+    socket.emit("Authentication Fail");
+    return;
+  }
   if (token) {
-    if (!token || !token.startsWith("Bearer ")) {
-      socket.emit("error");
-      return;
-    }
-
     // Extract the token value
     const tokenValue = token.replace("Bearer ", "");
 
@@ -84,7 +82,6 @@ io.on("connection", async (socket) => {
     const updatedTask = await updateTaskHasSocket(objData);
     socket.broadcast.emit("updated_task", updatedTask);
   });
-
   socket.on("create_task", async (data) => {
     const objData = JSON.parse(data);
 
