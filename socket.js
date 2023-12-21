@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
 import { connectDatabase } from "./api/configs/db.config.js";
 import roomModel from "./api/models/room.model.js";
-import userModel from "./api/models/user.model";
+import userModel from "./api/models/user.model.js";
 import { createChatRoom, createMessage } from "./api/services/chat.service.js";
 import {
   createTask,
