@@ -76,7 +76,7 @@ io.on("connection", async (socket) => {
       socket.emit("JSON ERR");
     }
     const deletedTask = await deleteTaskHasSocket(objData.id);
-    socket.broadcast.emit("deleted_task", deletedTask);
+    socket.emit("deleted_task", deletedTask);
   });
 
   socket.on("update_task", async (data) => {
@@ -85,7 +85,7 @@ io.on("connection", async (socket) => {
       socket.emit("JSON ERR");
     }
     const updatedTask = await updateTaskHasSocket(objData);
-    socket.broadcast.emit("updated_task", updatedTask);
+    socket.emit("updated_task", updatedTask);
   });
   socket.on("create_task", async (data) => {
     const objData = JSON.parse(data);
@@ -93,7 +93,8 @@ io.on("connection", async (socket) => {
       socket.emit("JSON ERR");
     }
     const createdTask = await createTaskWithSocket(user?._id, objData);
-    socket.broadcast.emit("created_task", createdTask);
+
+    socket.emit("created_task", createdTask);
   });
 });
 
