@@ -70,7 +70,7 @@ export const getPosts = async (limit, page) => {
 
     const posts = await postModel.paginate({}, options);
 
-    return successResponse(postsg);
+    return successResponse(posts);
   } catch (error) {
     return errorResponse(error.message);
   }
