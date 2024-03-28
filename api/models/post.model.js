@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema(
       default: 0,
     },
     time: {
-      type: Date,
+      type: String,
       default: null,
     },
     created_by: {

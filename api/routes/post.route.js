@@ -120,6 +120,7 @@ postRouter.get(
   //   validate(updateUserValidate),
   getPostDetailController
 );
+
 /**
  * @swagger
  * /post/{id}:
@@ -133,14 +134,14 @@ postRouter.get(
  *         schema:
  *           type: string
  *         required: true
- *         description: The room id
+ *         description: The post id
  *
  *     responses:
  *       200:
  *         description: Successful operation
  */
 postRouter.delete(
-  "/room/:id",
+  "/:id",
   authMiddleware,
   //   validate(updateUserValidate),
   deletePostController

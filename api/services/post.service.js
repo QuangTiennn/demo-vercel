@@ -1,4 +1,6 @@
+import { STATUS_CODE } from "../constants/common.constant.js";
 import { MESSAGES } from "../constants/messages.constant.js";
+import { currentTime } from "../helpers/index.js";
 
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
 import postModel from "../models/post.model.js";
@@ -48,14 +50,29 @@ export const getPostDetail = async (id, userId) => {
 
 export const deletePost = async (id, userId) => {
   try {
-    const foundPost = await postModel.findOne({ _id: id, created_by: userId });
+    const post = await postModel.findOne({
+      _id: id,
+      created_by: userId,
+      deletedAt: null,
+    });
 
-    if (!foundRoom) {
-      return errorResponse(MESSAGES.POST_NOT_FOUND, STATUS_CODE.BAD_REQUEST);
+    if (!post) {
+      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
     }
 
-    const deletedPost = await postModel.deleteOne({ _id: foundPost._id });
-    return successResponse(deletedPost);
+    const deletePost = await postModel.findByIdAndUpdate(
+      post._id,
+      {
+        deletedAt: currentTime,
+      },
+      { new: true }
+    );
+
+    if (!deletePost) {
+      return errorResponse(MESSAGES.FAIL, STATUS_CODE.BAD_REQUEST);
+    }
+
+    return successResponse(deletePost);
   } catch (error) {
     return errorResponse(error.message);
   }

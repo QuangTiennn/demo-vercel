@@ -58,8 +58,9 @@ export const updatePostController = async (req, res) => {
 export const deletePostController = async (req, res) => {
   try {
     const id = req.params.id;
+    const userId = req.user._id;
 
-    const result = await deletePost(id);
+    const result = await deletePost(id, userId);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }
