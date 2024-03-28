@@ -20,7 +20,7 @@ export const createPost = async (payload, userId) => {
 export const updatePost = async (id, userId, payload) => {
   try {
     const post = await postModel.findOneAndUpdate(
-      { _id: id, created_by: userId },
+      { _id: id, created_by: userId, deletedAt: null },
       {
         ...payload,
         created_by: userId,
@@ -36,7 +36,11 @@ export const updatePost = async (id, userId, payload) => {
 
 export const getPostDetail = async (id, userId) => {
   try {
-    const foundPost = await postModel.findOne({ _id: id, created_by: userId });
+    const foundPost = await postModel.findOne({
+      _id: id,
+      created_by: userId,
+      deletedAt: null,
+    });
 
     if (!foundPost) {
       return errorResponse(MESSAGES.POST_NOT_FOUND, STATUS_CODE.BAD_REQUEST);
@@ -85,7 +89,7 @@ export const getPosts = async (limit, page) => {
       limit,
     };
 
-    const posts = await postModel.paginate({}, options);
+    const posts = await postModel.paginate({ deletedAt: null }, options);
 
     return successResponse(posts);
   } catch (error) {
