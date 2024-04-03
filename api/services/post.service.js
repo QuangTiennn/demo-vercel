@@ -57,11 +57,11 @@ export const deletePost = async (id, userId) => {
     const post = await postModel.findOne({
       _id: id,
       created_by: userId,
-      deletedAt: null,
+      deletedAt: { $eq: null },
     });
 
     if (!post) {
-      return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
+      return errorResponse(MESSAGES.POST_NOT_FOUND, STATUS_CODE.BAD_REQUEST);
     }
 
     const deletePost = await postModel.findByIdAndUpdate(
@@ -82,14 +82,17 @@ export const deletePost = async (id, userId) => {
   }
 };
 
-export const getPosts = async (limit, page) => {
+export const getPosts = async (limit, page, userId) => {
   try {
     const options = {
       page,
       limit,
     };
 
-    const posts = await postModel.paginate({ deletedAt: null }, options);
+    const posts = await postModel.paginate(
+      { deletedAt: { $eq: null }, created_by: userId },
+      options
+    );
 
     return successResponse(posts);
   } catch (error) {

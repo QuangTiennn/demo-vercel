@@ -75,7 +75,7 @@ export const getListPostController = async (req, res) => {
     const id = req.user._id;
     const { limit, page } = req.query;
 
-    const result = await getPosts(Number(limit), Number(page));
+    const result = await getPosts(Number(limit), Number(page), id);
     if (!result.success) {
       handleErrorResponse(res, result.message, result.status_code);
     }

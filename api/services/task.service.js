@@ -265,7 +265,11 @@ export const getAllTask = async (id, limit, page, filter) => {
 
 export const deleteTaskHasSocket = async (id) => {
   try {
-    const task = await taskModel.findById(id);
+    const task = await taskModel.findOne({
+      _id: taskId,
+      created_by: userId,
+      deletedAt: null,
+    });
 
     if (!task) {
       return errorResponse(MESSAGES.TASK_NOT_EXISTED, STATUS_CODE.BAD_REQUEST);
